@@ -1,0 +1,55 @@
+version: '3.9'
+services:
+  # Builder service – executes the whole CI pipeline
+  ci-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile.builder
+    image: ghcr.io/nullroute-commits/django-ci-builder:latest
+    volumes:
+      - .:/workspace:cached  # mount source for easy iteration (optional)
+    environment:
+      # Secrets can be injected at runtime via env files or CI platform variables
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-secret}
+    command: ["/workspace/scripts/run_pipeline.sh"]
+
+  # Application runtime – used for manual testing or production deployment
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.runtime
+    image: ghcr.io/nullroute-commits/django-runtime:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_DB=app_db
+      - POSTGRES_USER=app_user
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secret}
+      - POSTGRES_HOST=db
+      - REDIS_HOST=cache
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-insecure-secret-key-for-dev}
+      - DJANGO_DEBUG=${DJANGO_DEBUG:-False}
+    depends_on:
+      - db
+      - cache
+
+  # PostgreSQL – official Alpine variant
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # KeyDB – Redis‑compatible, Alpine variant
+  cache:
+    image: eqalpha/keydb:latest-alpine
+    command: ["keydb-server", "--save", ""]
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
