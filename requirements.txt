@@ -1,2 +1,8 @@
 # Auto‑generated from Poetry lock file
 # Run: poetry export -f requirements.txt --without-hashes -o requirements.txt
+#
+# This file will be populated after running:
+#   poetry lock
+#   poetry export -f requirements.txt --without-hashes -o requirements.txt
+#
+# For now, this is a placeholder. The actual dependencies are managed in pyproject.toml
