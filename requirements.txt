@@ -1,0 +1,2 @@
+# Auto‑generated from Poetry lock file
+# Run: poetry export -f requirements.txt --without-hashes -o requirements.txt
