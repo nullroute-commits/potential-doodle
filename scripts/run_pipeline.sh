@@ -28,8 +28,6 @@ COMMIT=${GITHUB_SHA:-local}
 
 docker build -t ghcr.io/nullroute-commits/django-runtime:${COMMIT} -f Dockerfile.runtime .
 
-docker push ghcr.io/nullroute-commits/django-runtime:${COMMIT}
-
 # 7️⃣ Clean up auxiliary services
 docker compose down
 
