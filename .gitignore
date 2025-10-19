@@ -144,6 +144,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# Docker
+*.tar
+*.tar.gz
+
 # Spyder project settings
 .spyderproject
 .spyproject
