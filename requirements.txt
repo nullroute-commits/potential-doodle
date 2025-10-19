@@ -1,0 +1,8 @@
+# Auto-generated from Poetry lock file
+# Run: poetry export -f requirements.txt --without-hashes -o requirements.txt
+# This file will be populated after running: poetry lock && poetry export
+
+Django==4.2.5
+psycopg2-binary==2.9.9
+redis==5.0.1
+gunicorn==21.2.0
